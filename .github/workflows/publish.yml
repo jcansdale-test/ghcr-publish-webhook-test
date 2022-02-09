@@ -31,3 +31,5 @@ jobs:
 
       - name: Publish image
         run: docker push ${IMAGE,,}:${{ matrix.tag }} # lowercase IMAGE
+        env:
+          RUN: ${{ matrix.run }}
