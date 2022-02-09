@@ -9,10 +9,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tag: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+        tag: ['${RUN}', 'latest']
+        run: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
     env:
-      IMAGE: ghcr.io/${{ github.repository }}:latest
+      IMAGE: ghcr.io/${{ github.repository }}
     steps:
       - uses: actions/checkout@v2
 
@@ -23,10 +24,10 @@ jobs:
           echo 'LABEL org.opencontainers.image.description "This image was built from commit ${{ github.sha }}"' >> Dockerfile
 
       - name: Build image
-        run: docker build . -t ${IMAGE,,} # lowercase IMAGE
+        run: docker build . -t ${IMAGE,,}:${{ matrix.tag }} # lowercase IMAGE
 
       - name: Login to ghcr.io
         run: docker login https://ghcr.io -u token --password-stdin <<< ${{ github.token }}
 
       - name: Publish image
-        run: docker push ${IMAGE,,} # lowercase IMAGE
+        run: docker push ${IMAGE,,}:${{ matrix.tag }} # lowercase IMAGE
