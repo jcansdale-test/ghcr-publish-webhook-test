@@ -14,6 +14,8 @@ jobs:
 
     env:
       IMAGE: ghcr.io/${{ github.repository }}
+      RUN: ${{ matrix.run }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -31,5 +33,3 @@ jobs:
 
       - name: Publish image
         run: docker push ${IMAGE,,}:${{ matrix.tag }} # lowercase IMAGE
-        env:
-          RUN: ${{ matrix.run }}
